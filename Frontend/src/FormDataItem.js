@@ -1,14 +1,13 @@
 import React from 'react';
 import './style.css';
-//const HandleEditData = () => { };
 
 const FormDataItem = ({ data, displayEdit, handleDeleteData }) => {
     return (
         <div className={`formContainer data-item-${data.id}`}>
             <div className="FormTitle">
                 <div className="Title-Content">
-                    <div className="Kind-Title">{data.category}</div>
-                    <div className="Main-Title">{data.title}</div>
+                    <div className="Kind-Title">{data.title}</div>
+                    <div className="Main-Title">{data.content}</div>
                 </div>
                 <div className="Title-Btn">
                     <button onClick={() => displayEdit(data.id)} className="editBtn">
@@ -20,10 +19,9 @@ const FormDataItem = ({ data, displayEdit, handleDeleteData }) => {
                 </div>
             </div>
             <div className="form-details">
-                <p className="description">{data.description}</p>
-                <div className="deadline">
-                    <i className="fa-sharp fa-regular fa-clock"></i>
-                    <div className="deadline-date">{data.date}</div>
+                <p className="description">{data.state}</p>
+                <div>
+                    {data.assignee && <p className="assignee">{data.assignee.name}</p>}
                 </div>
             </div>
         </div>
