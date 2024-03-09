@@ -3,26 +3,36 @@ import './style.css';
 import anh1 from './anh1.png';
 import anh2 from './anh2.png';
 import FormDataItem from './FormDataItem';
-import AddForm from './AddForm';
 import EditForm from './EditForm';
 import axios from 'axios';
 const App = () => {
   const [tasks, setTasks] = useState([]);
   const [assignees, setAssignees] = useState([]);
-  //const [showAddForm, setShowAddForm] = useState(false);
   const [showEditForm, setShowEditForm] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedAssignee, setSelectedAssignee] = useState('');
+  const handleAssigneeChange = (e) => {
+    setSelectedAssignee(e.target.value);
+  };
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+
+  };
 
   // fetch data from API
   const fetchData = async () => {
     try {
-      const response = await axios.get('http://localhost:3000/tasks');
+      let url = `http://localhost:3000/tasks?content=${searchTerm}&assignee=${selectedAssignee}`;
+      console.log(url);
+      const response = await axios.get(url);
       setTasks(response.data);
       console.log(response.data);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
   };
+
   //fetch all assignees form api
   const fetchAssignees = async () => {
     try {
@@ -37,37 +47,19 @@ const App = () => {
   useEffect(() => {
     fetchData();
     fetchAssignees();
-  }, []);
-
-  // Sample data array containing tasks with different statuses
-  // const tasks = [
-  //   { id: 1, title: 'Work', content: 'Complete project proposal', assignee: 'EOD', state: 'Todo' },
-  //   { id: 2, title: 'Work', content: 'Complete project proposal', assignee: 'Duy', state: 'Doing' },
-  //   { id: 3, title: 'Work', content: 'Complete project proposal', assignee: 'Duy', state: 'Done' },
-  //   { id: 4, title: 'Work', content: 'Complete project proposal', assignee: 'Duy', state: 'Todo' },
-  //   { id: 5, title: 'Work', content: 'Complete project proposal', assignee: 'Duy', state: 'Todo' },
-  //   { id: 6, title: 'Work', content: 'Complete project proposal', assignee: 'Duy', state: 'Doing' },
-  //   { id: 7, title: 'Work', content: 'Complete project proposal', assignee: 'Duy', state: 'Done' },
-  //   { id: 8, title: 'Work', content: 'Complete project proposal', assignee: 'Duy', state: 'Todo' },
-  //   { id: 9, title: 'Work', content: 'Complete project proposal', assignee: 'Duy', state: 'Todo' },
-  //   { id: 10, title: 'Work', content: 'Complete project proposal', assignee: 'Duy', state: 'Doing' },
-  //   { id: 11, title: 'Work', content: 'Complete project proposal', assignee: 'Duy', state: 'Done' },
-  //   { id: 12, title: 'Work', content: 'Complete project proposal', assignee: 'Duy', state: 'Todo' },
-  // ];
-
+  }, [searchTerm,selectedAssignee]);
 
   const handleAddTask = () => {
-    //setShowAddForm(!showAddForm);
     displayEdit(null);
   };
 
   const displayEdit = (index) => {
-
     console.log('displayEdit' + index);
     const selected = tasks.find(task => task._id === index);
-    setSelectedTask(selected); // Set state mới với dữ liệu của mục được chọn
+    setSelectedTask(selected);
     setShowEditForm(!showEditForm);
   };
+
   const handleDeleteData = (i) => {
     // console.log('handleDeleteData' + i);
     axios.delete(`http://localhost:3000/tasks/${i}`)
@@ -77,15 +69,12 @@ const App = () => {
         fetchData();
       });
   };
+
   const handleCloseEditForm = () => {
     setShowEditForm(false);
     setSelectedTask(null);
     fetchData();
   };
-  // const handleCloseAddForm = () => {
-  //   setShowAddForm(false);
-  //   fetchData();
-  // };
 
   return (
     <div>
@@ -99,9 +88,30 @@ const App = () => {
                 <img className="anh2" src={anh2} alt="" />
               </div>
             </div>
-            <div id="add-btn" className="AddBtn" onClick={handleAddTask}>
-              <i className="fa-sharp fa-regular fa-plus"></i>
-              <div>New Task</div>
+            <div className='flex items-center space-x-4'>
+              <div>
+                <select
+                  className="border border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  value={selectedAssignee}
+                  onChange={handleAssigneeChange}
+                >
+                  <option value="">All Assignees</option>
+                  {assignees.map(assignee => (
+                    <option key={assignee._id} value={assignee._id}>{assignee.name}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <input className="border border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder='Search for a task'
+                  value={searchTerm}
+                  onChange={handleSearchChange}
+                />
+              </div>
+              <div id="add-btn" className={`AddBtn ${showEditForm ? 'opacity-50 pointer-events-none' : ''}`} onClick={handleAddTask}>
+                <i className="fa-sharp fa-regular fa-plus"></i>
+                <div>New Task</div>
+              </div>
             </div>
           </div>
         </div>

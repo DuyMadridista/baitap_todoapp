@@ -9,22 +9,20 @@ const EditForm = ({ handleCloseEditForm, selectedTask, allAssingees }) => {
         assignee: {},
         state: "pending"
     };
-    const [editedTask, setEditedTask] = useState(defaultTask); // State để lưu trữ giá trị chỉnh sửa
+    const [editedTask, setEditedTask] = useState(defaultTask); 
 
     const handleCloseForm = () => {
-        handleCloseEditForm(); // Thay đổi trạng thái showEditForm thành false
+        handleCloseEditForm(); 
     };
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         if (name === 'status') {
-            // Nếu là trường status, bạn cần cập nhật giá trị trực tiếp
             setEditedTask({
                 ...editedTask,
-                state: value // Cập nhật trạng thái của editedTask
+                state: value 
             });
         } else {
-            // Nếu không phải trường status, cập nhật giá trị như thông thường
             setEditedTask({
                 ...editedTask,
                 [name]: value
@@ -32,9 +30,6 @@ const EditForm = ({ handleCloseEditForm, selectedTask, allAssingees }) => {
         }
     };
 
-    // useEffect(() => {
-    //     setEditedTask(selectedTask); // Cập nhật lại giá trị của editedTask khi selectedTask thay đổi
-    // }, [selectedTask]);
     const handleEditTask = async (e) => {
         e.preventDefault();
         if (selectedTask) {
@@ -54,6 +49,7 @@ const EditForm = ({ handleCloseEditForm, selectedTask, allAssingees }) => {
                     state: editedTask.state,
                     assignee: editedTask.assignee || null,
                 }
+                console.log(newTask);
                 const response = await axios.post('http://localhost:3000/tasks', newTask);
                 console.log(response.data);
                 handleCloseEditForm();
@@ -101,16 +97,12 @@ const EditForm = ({ handleCloseEditForm, selectedTask, allAssingees }) => {
                         <option
                             key={assignee._id}
                             value={assignee._id}
-                        // selected={assignee._id === selectedTask.assignee._id ? 'selected' : ''}
                         >
                             {assignee.name}
                         </option>
                     ))}
                 </select>
             </div>
-
-
-
             <div className="mb-4 flex">
                 <div className="mr-4">
                     <input name="status" type="radio" value="pending" className="mr-1" checked={editedTask.state === "pending"} onChange={handleInputChange} />Pending
