@@ -1,8 +1,8 @@
 const router = require('express').Router();
 const taskController = require('../controller/task.controller');
 const verifySignUp  = require('../middleware/authMiddleware').verifyToken;
-router.use(verifySignUp)
-router.get('/', taskController.getTasks);
+//router.use(verifySignUp)
+router.get('/', taskController.getAllTasks);
 router.post('/', taskController.createTask);
 router.get('/:id', taskController.getTaskById);
 router.put('/:id', taskController.updateTaskById);

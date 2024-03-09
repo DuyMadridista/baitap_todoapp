@@ -11,7 +11,8 @@ const taskController = {
     },
     getAllTasks: async (req, res) => {
         try {
-            const tasks = await taskService.getAllTasks();
+            const {content,assignee} = req.query;
+            const tasks = await taskService.getAllTasks(content, assignee);
             res.status(200).json(tasks);
         } catch (error) {
             res.status(500).json({ message: error.message });

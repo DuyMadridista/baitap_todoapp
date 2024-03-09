@@ -20,9 +20,13 @@ const taskService = {
             throw new Error(error.message);
         }
     },
-    getAllTasks: async () => {
+    getAllTasks: async (content, assigneeId) => {
         try {
-            return await task.find();
+            let query = { content: { $regex: new RegExp(content, 'i') } };
+            if (assigneeId) {
+                query.assignee = assigneeId;
+            }
+            return await task.find(query).populate('assignee', 'name');
         } catch (error) {
             throw new Error(error.message);
         }
@@ -48,14 +52,7 @@ const taskService = {
             throw new Error(error.message);
         }
     },
-    searchTask: async (state) => {
-        try {
-            return await task.find({ state: state });
-        } catch (error) {
-            throw new Error(error.message);
-        }
-    },
-    getTasks: async (page, limit, sort, title) => {
+    getTasks: async (page=1, limit=10, sort=1, title='') => {
         try {
             return await task.find({ title: { $regex: new RegExp(title, 'i') } })
                 .populate('assignee', 'name')
