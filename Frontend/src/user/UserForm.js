@@ -8,7 +8,7 @@ const UserForm = ({ handleCloseUserForm, selectedUser }) => {
     };
     const [editedUser, setEditedUser] = useState(defaultUser);
     const [errors, setErrors] = useState({});
-    const [errorMessage, setErrorMessage] = useState(''); // Thông báo lỗi
+    const [errorMessage, setErrorMessage] = useState(''); 
 
     const handleCloseForm = () => {
         handleCloseUserForm();

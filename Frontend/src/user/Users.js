@@ -77,7 +77,7 @@ const Users = () => {
             <div className='flex justify-between items-center mb-4'>
                 <div className="flex items-center justify-around">
                     <select
-                        className="border border-gray-400 px-4 py-2 mr-2 rounded"
+                        className="border border-gray-400 px-4 py-2.5 mr-2 mb-2 rounded"
                         onChange={(e) => setSortOrder(e.target.value)}
                     >
                         <option value="1">Ascending</option>
@@ -135,7 +135,7 @@ const Users = () => {
             {showForm && (
                 <div className="fixed inset-0 flex items-center justify-center bg-gray-200 bg-opacity-75 z-50 ">
                     <div
-                        className="bg-white p-4 rounded-lg w-1/2  ">
+                        className=" p-4 rounded-lg w-1/2  ">
                         <UserForm
                             handleCloseUserForm={handleCloseForm}
                             selectedUser={users.find(user => user._id === editUserId)}

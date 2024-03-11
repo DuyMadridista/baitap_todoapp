@@ -126,9 +126,9 @@ const Task = () => {
       <div className="mainBody">
         <div className="container">
           <div className="mainBody-inner">
-            {/* Todo List */}
+            {/* Pending List */}
             <div className="List-form">
-              <div className="status Todo">To Do
+              <div className="status Todo font-bold">Pending
                 <div className="list-count countTodo">{tasks.filter(task => task.state === 'pending').length}</div>
               </div>
               <div className="TodoList">
@@ -142,9 +142,9 @@ const Task = () => {
                 ))}
               </div>
             </div>
-            {/* Doing List */}
+            {/* InProgress List */}
             <div className="List-form">
-              <div className="status Doing">Doing
+              <div className="status Doing font-bold ">In Progress
                 <div className="list-count countDoing">{tasks.filter(task => task.state === 'in_progress').length}</div>
               </div>
               <div className="DoingList">
@@ -158,9 +158,9 @@ const Task = () => {
                 ))}
               </div>
             </div>
-            {/* Done List */}
+            {/* Completed List */}
             <div className="List-form">
-              <div className="status Done">Done
+              <div className="status Done font-bold">Completed
                 <div className="list-count countDone">{tasks.filter(task => task.state === 'completed').length}</div>
               </div>
               <div className="DoneList">
@@ -177,7 +177,7 @@ const Task = () => {
           </div>
         </div>
       </div>
-      {/* Editing Task Form */}
+      {/* Editing Task  */}
       {showEditForm && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-200 bg-opacity-75">
           <div className="bg-white p-4 rounded-lg">
@@ -185,7 +185,7 @@ const Task = () => {
           </div>
         </div>
       )}
-      {/* Delete Confirmation Form */}
+      {/* Delete Confirmation  */}
       {showDeleteConfirmation && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-200 bg-opacity-75">
           <div className="bg-white p-4 rounded-lg shadow-lg">
