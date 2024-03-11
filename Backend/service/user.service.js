@@ -20,9 +20,13 @@ const userService = {
             throw new Error(error.message);
         }
     },
-    getAllUsers: async () => {
+    getUsers: async (search='',sort=1,page=1,limit=2) => {
         try {
-            return await User.find();
+            return await User.find({ name: { $regex: new RegExp(search, 'i') } })
+                .populate('tasks')
+                .sort({ name: parseInt(sort) })
+                .skip((page - 1) * limit)
+                .limit(limit);
         } catch (error) {
             throw new Error(error.message);
         }
@@ -48,24 +52,9 @@ const userService = {
             throw new Error(error.message);
         }
     },
-    assignTask: async (userId, taskId) => {
+    getAllUsers: async () => {
         try {
-            const user = await User.findById(userId);
-            if (!user) {
-                throw new Error("User not found");
-            }
-            if (user.tasks.includes(taskId)) {
-                throw new Error("Task already assigned");
-            }
-            const t = await task.findById(taskId);
-            if (!t) {
-                throw new Error("Task not found");
-            }
-            t.assignee = userId;
-            await t.save();
-            user.tasks.push(t);
-            await user.save();
-            return user;
+            return await User.find();
         } catch (error) {
             throw new Error(error.message);
         }
