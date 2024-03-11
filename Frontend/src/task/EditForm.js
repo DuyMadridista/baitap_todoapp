@@ -6,13 +6,13 @@ const EditForm = ({ handleCloseEditForm, selectedTask, allAssingees }) => {
     const defaultTask = selectedTask ? selectedTask : {
         title: '',
         content: '',
-        assignee: {},
+        assignee: null,
         state: "pending"
     };
-    const [editedTask, setEditedTask] = useState(defaultTask); 
-
+    const [editedTask, setEditedTask] = useState(defaultTask);
+    const [errors, setErrors] = useState({});
     const handleCloseForm = () => {
-        handleCloseEditForm(); 
+        handleCloseEditForm();
     };
 
     const handleInputChange = (e) => {
@@ -20,7 +20,13 @@ const EditForm = ({ handleCloseEditForm, selectedTask, allAssingees }) => {
         if (name === 'status') {
             setEditedTask({
                 ...editedTask,
-                state: value 
+                state: value
+            });
+        } else if (name === 'assignee') {
+            const assigneeValue = value === '' ? null : value;
+            setEditedTask({
+                ...editedTask,
+                [name]: assigneeValue
             });
         } else {
             setEditedTask({
@@ -30,34 +36,31 @@ const EditForm = ({ handleCloseEditForm, selectedTask, allAssingees }) => {
         }
     };
 
+    const validateForm = () => {
+        let errors = {};
+        if (!editedTask.title.trim()) {
+            errors.title = 'Title is required';
+        }
+        if (!editedTask.content.trim()) {
+            errors.content = 'Content is required';
+        }
+        setErrors(errors);
+        return Object.keys(errors).length === 0;
+    };
+
     const handleEditTask = async (e) => {
         e.preventDefault();
-        if (selectedTask) {
+        if (validateForm()) {
             try {
-                const response = await axios.put(`http://localhost:3000/tasks/${selectedTask._id}`, editedTask);
+                const response = selectedTask
+                    ? await axios.put(`http://localhost:3000/tasks/${selectedTask._id}`, editedTask)
+                    : await axios.post('http://localhost:3000/tasks', editedTask);
                 console.log(response.data);
                 handleCloseEditForm();
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
         }
-        else {
-            try {
-                const newTask = {
-                    title: editedTask.title,
-                    content: editedTask.content,
-                    state: editedTask.state,
-                    assignee: editedTask.assignee || null,
-                }
-                console.log(newTask);
-                const response = await axios.post('http://localhost:3000/tasks', newTask);
-                console.log(response.data);
-                handleCloseEditForm();
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
-        }
-
     };
 
     return (
@@ -75,24 +78,25 @@ const EditForm = ({ handleCloseEditForm, selectedTask, allAssingees }) => {
                 <input name="title" id="title" type="text" placeholder="Title" required
                     value={editedTask.title} onChange={handleInputChange}
                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+                {errors.title && <div className="text-red-500">{errors.title}</div>}
             </div>
             <div className="mb-4">
                 <label htmlFor="content" className="block text-gray-700 font-bold mb-2">Content</label>
                 <textarea name="content" id="content" cols="30" rows="5" placeholder="Content" required
                     value={editedTask.content} onChange={handleInputChange}
                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"></textarea>
+                {errors.content && <div className="text-red-500">{errors.content}</div>}
             </div>
             <div className="mb-4">
                 <label htmlFor="assignee" className="block text-gray-700 font-bold mb-2">Assignee</label>
                 <select
                     name="assignee"
                     id="assignee"
-                    required
-                    defaultValue={editedTask.assignee ? editedTask.assignee._id : ''}
+                    value={editedTask.assignee ? editedTask.assignee._id : ''}
                     onChange={handleInputChange}
                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 >
-                    <option value="">Chọn 1 assignee</option>
+                    {!editedTask.assignee && <option value="">Select an assignee</option>}
                     {allAssingees.map((assignee) => (
                         <option
                             key={assignee._id}

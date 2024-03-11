@@ -24,7 +24,6 @@ body {
     background: #fff;
     position: fixed;
     width: 100%;
-    z-index: 999;
     transition: 0.5s;
 }
 
@@ -145,7 +144,7 @@ body {
     overflow: scroll;
     overflow-x: hidden;
     overflow-y: auto;
-    height: 75vh;
+    height: 71vh;
     border-radius: 8px;
     padding: 0.2rem 0;
 
@@ -155,7 +154,7 @@ body {
     overflow: scroll;
     overflow-x: hidden;
     overflow-y: auto;
-    height: 75vh;
+    height: 71vh;
     border-radius: 8px;
     padding: 0.2rem 0;
 
@@ -165,7 +164,7 @@ body {
     overflow: scroll;
     overflow-x: hidden;
     overflow-y: auto;
-    height: 75vh;
+    height: 71vh;
     border-radius: 8px;
     padding: 0.2rem 0;
 }
@@ -192,8 +191,6 @@ body {
 .Kind-Title {
     font-size: 20px;
     font-weight: 500;
-    color: blue;
-    text-decoration: underline;
     padding-bottom: 0.5rem;
 }
 
